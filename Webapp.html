@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number Guessing Game</title>
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4); /* Fun gradient */
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .game-container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 400px;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #ff6f61;
+    }
+    p {
+      font-size: 1.1rem;
+      color: #555555;
+    }
+    input[type="number"] {
+      padding: 10px;
+      width: 80%;
+      border: 2px solid #ff6f61;
+      border-radius: 5px;
+      font-size: 1rem;
+      text-align: center;
+      margin: 10px 0;
+    }
+    button {
+      background-color: #ff6f61;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background-color: #e05550;
+    }
+    .result {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+    .result.success {
+      color: #28a745;
+    }
+    .result.error {
+      color: #dc3545;
+    }
+    .new-game {
+      display: none;
+      margin-top: 20px;
+      background-color: #ffc107;
+      color: #ffffff;
+    }
+    .new-game:hover {
+      background-color: #e0a800;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Number Guessing Game</h1>
+    <p>Guess a number between <strong>1</strong> and <strong>100</strong>. You have <span id="remaining-guesses">5</span> guesses!</p>
+    <input type="number" id="userGuess" placeholder="Enter your guess" min="1" max="100">
+    <button onclick="checkGuess()">Submit</button>
+    <div class="result" id="result"></div>
+    <button class="new-game" onclick="startNewGame()">Start New Game</button>
+  </div>
+
+  <script>
+    let randomNumber = Math.floor(Math.random() * 100) + 1; // Random number between 1 and 100
+    let remainingGuesses = 5;
+
+    function checkGuess() {
+      const userGuess = parseInt(document.getElementById("userGuess").value);
+      const resultDiv = document.getElementById("result");
+
+      if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+        resultDiv.textContent = "Please enter a valid number between 1 and 100!";
+        resultDiv.className = "result error";
+        return;
+      }
+
+      remainingGuesses--;
+      document.getElementById("remaining-guesses").textContent = remainingGuesses;
+
+      if (userGuess === randomNumber) {
+        resultDiv.textContent = "🎉 Congratulations! You guessed the number!";
+        resultDiv.className = "result success";
+        document.querySelector(".new-game").style.display = "block";
+      } else if (remainingGuesses === 0) {
+        resultDiv.textContent = `😢 Game over! The correct number was ${randomNumber}.`;
+        resultDiv.className = "result error";
+        document.querySelector(".new-game").style.display = "block";
+      } else if (userGuess > randomNumber) {
+        resultDiv.textContent = "Too high! Try again.";
+        resultDiv.className = "result error";
+      } else {
+        resultDiv.textContent = "Too low! Try again.";
+        resultDiv.className = "result error";
+      }
+    }
+
+    function startNewGame() {
+      randomNumber = Math.floor(Math.random() * 100) + 1;
+      remainingGuesses = 5;
+      document.getElementById("remaining-guesses").textContent = remainingGuesses;
+      document.getElementById("userGuess").value = "";
+      document.getElementById("result").textContent = "";
+      document.querySelector(".new-game").style.display = "none";
+    }
+  </script>
+</body>
+</html>
